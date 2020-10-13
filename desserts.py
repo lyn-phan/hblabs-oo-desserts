@@ -3,6 +3,7 @@
 
 class Cupcake:
     """A cupcake."""
+
     cache = {}
     
     def __init__(self, name, flavor, price, qty=0):
@@ -11,7 +12,7 @@ class Cupcake:
         self.flavor = flavor
         self.price = price
         self.qty = qty
-        self.cache[name] = [flavor, price, qty]
+        self.cache[name] = self
     
     def add_stock(self, amount):
         self.qty = amount + self.qty
@@ -23,15 +24,29 @@ class Cupcake:
             print("Sorry, these cupcakes are sold out!")
         
         elif self.qty - amount < 0:
-            print(f"Sorry there are only {qty} cupcakes available.")
+            print(f"Sorry there are only {self.qty} cupcakes available.")
 
         else:
             self.qty = self.qty - amount
     
-    # def __repr__(self):
-    #     """Human-readable printout for debugging."""
+    @staticmethod
+    def scale_recipe(ingredients, amount):
+        # for (ingredient, qty) in ingredients:
+        #     return (ingredient, qty * amount)
+        return [(ingredient, qty * amount) for ingredient, qty in ingredients]
+    
+    @classmethod
+    def get(cls, name):
+        if name not in cls.cache:
+            print("Sorry that cupcake doesn't exist")
+            return
+        
+        return cls.cache[name]
 
-    #     return f'<Cupcake name="{self.name}" qty={self.qty}>'
+    def __repr__(self):
+        """Human-readable printout for debugging."""
+
+        return f'<Cupcake name="{self.name}" qty={self.qty}>'
 
 
 if __name__ == '__main__':
